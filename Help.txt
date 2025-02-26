@@ -1,0 +1,41 @@
+bool SortedBag::remove(TComp e) {
+	int index = search1(e);
+	if (array_nodes[index].get_frequency() > 1) {
+		array_nodes[index].cut_frequency();
+	}///the node has a freq bigger than 1
+	else if (array_left[index] == NULL_TCOMP && array_right[index]==NULL_TCOMP) {
+		array_nodes[index].set_info(NULL_TCOMP);
+		array_nodes[index].set_frequency(0);
+		delete_parent(index);///delete the right or left of the parent
+		first_empty = index;
+		sz--;
+	}///the node is a leaf;
+	else if (array_left[index] != NULL_TCOMP && array_right[index] != NULL_TCOMP) {
+
+	}
+	else if (array_left[index] != NULL_TCOMP || array_right[index] != NULL_TCOMP) {
+		if (array_left[index] != NULL_TCOMP) {
+			int newIndex= array_left[index];
+			array_nodes[index].set_info(array_nodes[newIndex].get_info());
+			array_nodes[index].set_frequency(array_nodes[newIndex].get_frequency());
+			array_left[index]= array_left[newIndex];
+			array_right[index] = array_right[newIndex];
+			array_nodes[newIndex].set_info(NULL_TCOMP);
+			array_left[index] =NULL_TCOMP;
+			array_right[index] = NULL_TCOMP;
+			first_empty = newIndex;
+		}
+		if (array_right[index] != NULL_TCOMP) {
+			int newIndex = array_right[index];
+			array_nodes[index].set_info(array_nodes[newIndex].get_info());
+			array_nodes[index].set_frequency(array_nodes[newIndex].get_frequency());
+			array_left[index] = array_left[newIndex];
+			array_right[index] = array_right[newIndex];
+			array_nodes[newIndex].set_info(NULL_TCOMP);
+			array_left[index] = NULL_TCOMP;
+			array_right[index] = NULL_TCOMP;
+			first_empty = newIndex;
+		}
+	}///the node has just one kid;
+	return false;
+}
